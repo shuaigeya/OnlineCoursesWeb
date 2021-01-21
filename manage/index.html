@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="Responsive Web UI Kit &amp; Dashboard Template based on Bootstrap">
+	<meta name="author" content="AdminKit">
+	<meta name="keywords" content="adminkit, bootstrap, web ui kit, dashboard template, admin template">
+
+	<link rel="shortcut icon" href="img/icons/icon-48x48.png" />
+
+	<title>AdminKit</title>
+
+	<link href="css/app.css" rel="stylesheet">
+
+	<script src="../static/js/jquery-3.5.1.js"></script>
+	<script src="../static/js/vue.js"></script>
+	<!-- 引入样式 -->
+	<link rel="stylesheet" href="../static/element-ui/lib/theme-chalk/index.css">
+	<!-- 引入组件库 -->
+	<script src="../static/element-ui/lib/index.js"></script>
+</head>
+
+<body>
+	<div class="wrapper" id="app">
+		<nav id="sidebar" class="sidebar">
+			<div class="sidebar-content js-simplebar">
+
+				<div >
+<!--					rgb(191, 203, 217)-->
+					<el-menu default-active="1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse"  @select="handleSelect"
+							 background-color="#222e3c" text-color="white" :unique-opened= true menu-trigger="click" >
+						<el-menu-item index="1" @click="index">
+							<i class="el-icon-s-home"></i>
+							<span slot="title">首页</span>
+						</el-menu-item>
+
+						<el-submenu index="2">
+							<template slot="title">
+								<i class="el-icon-s-custom"></i>
+								<span slot="title">用户</span>
+							</template>
+							<el-menu-item-group>
+								<el-menu-item index="2-1" >用户列表</el-menu-item>
+								<el-menu-item index="2-2">会员列表</el-menu-item>
+								<el-menu-item index="2-3">管理员类型</el-menu-item>
+								<el-menu-item index="2-4" >管理员列表</el-menu-item>
+							</el-menu-item-group>
+						</el-submenu>
+
+						<el-submenu index="3">
+							<template slot="title">
+								<i class="el-icon-video-camera-solid"></i>
+								<span slot="title">博客</span>
+							</template>
+							<el-menu-item-group>
+								<el-menu-item index="3-1">博客列表</el-menu-item>
+								<el-menu-item index="3-2">博客标签</el-menu-item>
+							</el-menu-item-group>
+						</el-submenu>
+
+						<el-submenu index="4">
+							<template slot="title">
+								<i class="el-icon-s-flag"></i>
+								<span slot="title">班级</span>
+							</template>
+							<el-menu-item-group>
+								<el-menu-item index="4-1">班级列表</el-menu-item>
+								<el-menu-item index="4-2">班级标签</el-menu-item>
+								<el-menu-item index="4-3">试卷列表</el-menu-item>
+								<el-menu-item index="4-4">题目列表</el-menu-item>
+								<el-menu-item index="4-5">视频列表</el-menu-item>
+							</el-menu-item-group>
+						</el-submenu>
+
+						<el-submenu index="5">
+							<template slot="title">
+								<i class="el-icon-s-comment"></i>
+								<span slot="title">评论</span>
+							</template>
+							<el-menu-item-group>
+								<el-menu-item index="5-1">评论列表</el-menu-item>
+							</el-menu-item-group>
+						</el-submenu>
+
+					</el-menu>
+
+
+				</div>
+			</div>
+		</nav>
+
+		<div class="main">
+			<nav class="navbar navbar-expand navbar-light navbar-bg">
+				<a class="sidebar-toggle d-flex">
+          <i class="hamburger align-self-center"></i>
+        </a>
+
+				<form class="form-inline d-none d-sm-inline-block">
+					<div class="input-group input-group-navbar">
+						<h4>后台管理系统</h4>
+					</div>
+				</form>
+
+				<div class="navbar-collapse collapse">
+					<ul class="navbar-nav navbar-align">
+						<li class="nav-item dropdown">
+							  <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-toggle="dropdown">
+								<i class="align-middle" data-feather="settings"></i>
+							  </a>
+							  <a class="nav-link dropdown-toggle d-none d-sm-inline-block"  data-toggle="dropdown">
+								<img src="../static/img/image/1.jpg" class="avatar img-fluid rounded mr-1"  /> <span class="text-dark">{{admin.adminName}}</span>
+							  </a>
+
+							<div class="dropdown-menu dropdown-menu-right">
+								<a class="dropdown-item" href="./login.html">退出登录</a>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</nav>
+
+			<main class="content" >
+				<div class="container-fluid p-0" style="width: 100%;height: 100%">
+
+					<div class="row" style="width: 100%;height: 100%">
+						<div class="col-xl-12 col-xxl-12" style="width: 100%;height: 100%">
+							<div id ="body_mian" style="width: 100%;height: 100%">
+									<iframe src="./first.html" name="ifd"
+											style="min-height:800px"
+											width="100%" scrolling="no"
+											frameborder="0"></iframe>
+
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+			</main>
+
+		</div>
+	</div>
+
+
+	<script src="js/app.js"></script>
+	<script>
+		var Main = {
+			data() {
+				return {
+					isCollapse: false,
+					activeIndex: '1',
+					admin:{
+						adminName:'admin'
+					}
+				};
+			},
+			methods: {
+				develop:function(){
+					this.isCollapse = !this.isCollapse;
+					if(!this.isCollapse){
+						$("#main_1").css("padding-left","15%");
+					}else {
+						$("#main_1").css("padding-left","6%");
+					}
+				},
+				index:function(){
+					$("iframe").attr("src","first.html");
+				},
+				clickOpen(key, keyPath){
+					console.log(key, keyPath);
+				},
+				handleOpen(key, keyPath) {
+					console.log(key, keyPath);
+				},
+				handleClose(key, keyPath) {
+					console.log(key, keyPath);
+				},
+				handleSelect(key, keyPath) {
+					if(key === "2-1"){
+						$("iframe").attr("src","./html/user/userList.html");
+					}else if(key === "2-2"){
+						$("iframe").attr("src","./html/user/memberList.html");
+					}else if(key === "2-3"){
+						$("iframe").attr("src","./html/user/adminType.html");
+					}else if(key === "2-4"){
+						$("iframe").attr("src","./html/user/admin.html");
+					}else if(key === "3-1"){
+						$("iframe").attr("src","./html/blog/blogList.html");
+					}else if(key === "3-2"){
+						$("iframe").attr("src","./html/blog/blogType.html");
+					}else if(key === "4-1"){
+						$("iframe").attr("src","./html/class/classList.html");
+					}else if(key === "4-2"){
+						$("iframe").attr("src","./html/class/classLabel.html");
+					}else if(key === "4-3"){
+						$("iframe").attr("src","./html/class/textPaperList.html");
+					}else if(key === "4-4"){
+						$("iframe").attr("src","./html/class/subjectList.html");
+					}else if(key === "4-5"){
+						$("iframe").attr("src","./html/video/videoList.html");
+					}else if(key === "5-1"){
+						$("iframe").attr("src","./html/comment/commentList.html");
+					}
+				},
+				handleCommand(command) {
+					this.$message('click on item ' + command);
+				},
+			},
+			mounted() {
+				let _this =this;
+				$.ajax({
+					type : "post",
+					url : "http://localhost:20000/util/session/getUser",
+					dataType : "json",
+					contentType : "application/json",
+					crossDomain: true,
+					xhrFields:{
+						withCredentials:true
+					},
+					success:function (result) {
+						console.log(result);
+						_this.admin.adminName = result.data.adminName;
+
+					}
+				})
+			}
+		};
+
+		var Ctor = Vue.extend(Main);
+		new Ctor().$mount('#app');
+	</script>
+
+</body>
+
+</html>

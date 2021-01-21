@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../../../static/js/jquery-3.5.1.js"></script>
+    <script src="../../../static/js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../../../static/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="../../../static/element-ui/lib/index.js"></script>
+
+</head>
+<style>
+    #app{
+        width: 60%;
+        margin: auto;
+    }
+</style>
+<body>
+<div id="app">
+    <h3 style="text-align: center">修改用户</h3>
+    <el-form ref="form" :model="form" label-width="80px" >
+        <el-form-item label="用户名" >
+            <el-input v-model="form.userName" ></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+            <el-input v-model="form.userPassword" show-password></el-input>
+        </el-form-item>
+        <el-form-item label="性别">
+            <el-radio-group v-model="form.sex">
+                <el-radio label="男"></el-radio>
+                <el-radio label="女"></el-radio>
+            </el-radio-group>
+        </el-form-item>
+        <el-form-item label="年龄">
+            <el-select v-model="form.age" placeholder="请选择年龄">
+                <el-option label="<16" value="item"></el-option>
+                <el-option :value="item+16"  v-for="item in 43">{{item+16}}</el-option>
+                <el-option label=">60" value="beijing"></el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="手机号">
+            <el-input v-model="form.userPhone"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱">
+            <el-input v-model="form.userEmail"></el-input>
+        </el-form-item>
+        <el-form-item label="图像">
+            <el-upload
+                    action="http://localhost:20000/util/upload/"
+                    :limit="1"
+                    list-type="picture-card"
+                    :on-preview="handlePictureCardPreview"
+                    :on-success="success"
+                    :on-remove="handleRemove">
+                <i class="el-icon-plus"></i>
+            </el-upload>
+            <el-dialog :visible.sync="form.dialogVisible">
+                <img width="100%" :src="form.dialogImageUrl" alt="">
+            </el-dialog>
+        </el-form-item>
+        <el-form-item label="身份">
+            <el-radio-group v-model="form.userType">
+                <el-radio-button label="学员" name="0"></el-radio-button>
+                <el-radio-button label="老师" name="1"></el-radio-button>
+            </el-radio-group>
+        </el-form-item>
+        <el-form-item label="个性签名">
+            <el-input type="textarea" v-model="form.userAutograph"></el-input>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="onSubmit">点击修改</el-button>
+            <el-button>取消</el-button>
+        </el-form-item>
+    </el-form>
+</div>
+</body>
+<script>
+    $(function () {
+        //字符串转对象 取出字符串
+        var data = JSON.parse(localStorage.getItem("data"));
+        console.log(data);
+        var Main = {
+            data() {
+                return {
+                    form: {
+                        userId:data.userId,
+                        userName: data.userName,
+                        userPassword:data.userPassword,
+                        sex: data.userSex,
+                        age: data.userAge,
+                        userPhone:data.userPhone,
+                        userEmail:data.userEmail,
+                        userType:data.userType,
+                        userAutograph:data.userAutograph,
+                        userHeadPortrait:data.userHeadPortrait,
+                        dialogImageUrl: '',
+                        dialogVisible: false,
+                    }
+                }
+            },
+            methods: {
+                onSubmit() {
+                    console.log(this.form);
+                    this.$confirm('是否确认修改', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        let _this =this;
+                        let type_id = 1;
+                        if(this.form.userType == "学员"){
+                            type_id = 0;
+                        }
+                        $.ajax({
+                            type: "post",
+                            url: "http://localhost:20000/user/update" ,
+                            dataType: "json",
+                            contentType: "application/json",
+                            data:JSON.stringify({
+                                "userId":this.form.userId,
+                                "userType":type_id,
+                                "userName":this.form.userName,
+                                "userPassword":this.form.userPassword,
+                                "userSex":this.form.sex,
+                                "userAge":this.form.age,
+                                "userPhone":this.form.userPhone,
+                                "userEmail":this.form.userEmail,
+                                "userHeadPortrait":this.form.userHeadPortrait,
+                                "userAutograph":this.form.userAutograph
+                            }),
+                            success: function (result) {
+                                console.log(result)
+                                if (result.code == 10000) {
+                                    _this.$message({
+                                        type: 'success',
+                                        message: "修改成功",
+                                    });
+                                    $(window).attr('location','./userList.html');
+                                }else {
+                                    _this.$message({
+                                        type: 'error',
+                                        message: "修改失败",
+                                    });
+                                }
+                            }
+                        });
+
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消修改'
+                        });
+                    });
+
+                },
+                handleRemove(file, fileList) {
+                    console.log(file, fileList);
+                },
+                handlePictureCardPreview(file) {
+                    this.form.dialogImageUrl = file.url;
+                    this.form.dialogVisible = true;
+                },
+                success(response, file, fileList) {
+                    console.log(file);
+                    this.form.userHeadPortrait = file.name;
+                },
+            }
+        }
+        var Ctor = Vue.extend(Main)
+        new Ctor().$mount('#app')
+    });
+</script>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../../static/js/jquery-3.5.1.js"></script>
+    <script src="../../static/js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../../static/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="../../static/element-ui/lib/index.js"></script>
+
+</head>
+<style>
+    #app{
+        width: 60%;
+        margin: auto;
+    }
+</style>
+<body>
+<div id="app">
+    <el-form ref="form" :model="form" label-width="80px" >
+        <el-form-item label="视频名称">
+            <el-input v-model="form.videoName"></el-input>
+        </el-form-item>
+        <el-form-item label="添加视频" class="video-upload">
+            <el-upload
+                    class="upload-demo"
+
+                    drag
+                    accept=".mp4"
+                    :auto-upload="false"
+                    :before-upload="beforeUpload"
+                    action="../static"
+                    :multiple="false">
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                <div class="el-upload__tip" slot="tip">只能上传视频，且不超过500M</div>
+            </el-upload>
+        </el-form-item>
+
+        <el-form-item label="个性签名">
+            <el-input type="textarea" v-model="form.userAutograph"></el-input>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="onSubmit">立即创建</el-button>
+            <el-button>取消</el-button>
+        </el-form-item>
+    </el-form>
+</div>
+</body>
+<script>
+    $(function () {
+        var Main = {
+            data() {
+                return {
+                    fileList: [{name: '', url: ''}],
+                    form: {
+                        videoName: '',
+                        videoSrc:'',
+                        videoBriefIntroduction: '',
+                    },
+
+                }
+            },
+            methods: {
+                onSubmit() {
+                    // this.$confirm('确认添加?', '提示', {
+                    //     confirmButtonText: '确定',
+                    //     cancelButtonText: '取消',
+                    //     type: 'warning'
+                    // }).then(() => {
+                    //     let _this =this;
+                    //     // $.ajax({
+                    //     //     type : "post",
+                    //     //     url : "http://localhost:20000/user/add",
+                    //     //     contentType : "application/json;charset=UTF-8",
+                    //     //     data:JSON.stringify({
+                    //     //         "userTypeId": this.form.userType,
+                    //     //         "userName":this.form.userName,
+                    //     //         "userPassword":this.form.userPassword,
+                    //     //         "userSex":this.form.sex,
+                    //     //         "userAge":this.form.age,
+                    //     //         "userPhone":this.form.userPhone,
+                    //     //         "userEmail":this.form.userEmail,
+                    //     //         "userAutograph":this.form.userAutograph
+                    //     //     }),
+                    //     //     success: function (result) {
+                    //     //         console.log(result)
+                    //     //         if (result.code == 10000) {
+                    //     //             _this.$message({
+                    //     //                 type: 'success',
+                    //     //                 message: "添加成功",
+                    //     //             });
+                    //     //             $(window).attr('location','./userList.html');
+                    //     //         }else {
+                    //     //             _this.$message({
+                    //     //                 type: 'error',
+                    //     //                 message: "添加失败",
+                    //     //             });
+                    //     //         }
+                    //     //     }
+                    //     // });
+                    //
+                    // }).catch(() => {
+                    //     this.$message({
+                    //         type: 'info',
+                    //         message: '已取消删除'
+                    //     });
+                    // });
+
+                    console.log(this.form);
+
+                },
+                beforeUpload(file){
+                    console.log(file)
+                    return false;
+                }
+            }
+        }
+        var Ctor = Vue.extend(Main)
+        new Ctor().$mount('#app')
+    });
+</script>
+</html>

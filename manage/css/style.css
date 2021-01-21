@@ -1,0 +1,26 @@
+body{
+    background: #f7f7fc;
+}
+.grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+}
+#input_test{
+    width: 100%;
+    background: white;
+    margin-bottom: 1%;
+    border: 1px solid #e6e6e6;
+    padding: 0 1% 2% 2%;
+    box-sizing:border-box;
+    border-radius: 10px;
+}
+
+#button_1{
+    width: 100%;
+    padding: 1% 1% 1% 2%;
+    margin-bottom: 2%;
+    border: 1px solid #e6e6e6;
+    box-sizing:border-box;
+    background: white;
+    border-radius: 10px;
+}

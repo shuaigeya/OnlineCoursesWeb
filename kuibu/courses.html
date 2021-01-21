@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <!-- All CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/themify-icons.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="../static/js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../static/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="../static/element-ui/lib/index.js"></script>
+
+    <title></title>
+  </head>
+  <body class="courses-page">
+
+  <div id="app">
+    <!-- Preloader -->
+    <div id="preloader">
+      <div id="status"></div>
+    </div>
+    
+    <!-- Header strat -->
+    <header class="header">
+      <div class="container">
+        <nav class="navbar">
+          <!-- Site logo -->
+          <a href="home.html" class="logo">
+            <h4>在线课程前台</h4>
+          </a>
+          <a href="javascript:void(0);" id="mobile-menu-toggler">
+            <i class="ti-align-justify"></i>
+          </a>
+          <ul class="navbar-nav">
+            <li>
+              <a href="home.html">首页</a>
+            </li>
+
+            <li>
+              <a href="courses.html">课程</a>
+            </li>
+
+            <li >
+              <a href="blog.html">博客</a>
+            </li>
+
+            <li >
+              <a href="myCourse.html">我的课程</a>
+            </li>
+
+            <template v-if="user == null">
+              <li class="has-menu-child">
+                <a href="javascript:void(0);">登录</a>
+                <ul class="sub-menu">
+                  <li><a href="login.html">登录</a></li>
+                  <li><a href="signup.html">注册</a></li>
+                </ul>
+              </li>
+            </template>
+
+            <template v-else>
+              <li class="has-menu-child" style="padding-top: 10px; margin-left: 10px">
+                <img :src="'../static/img/image/' + user.userHeadPortrait" style="width: 35px;height: 35px;border-radius: 50%">
+                <!--              <img src="../static/img/image/1.jpg" style="width: 30px;height: 30px">-->
+                <ul class="sub-menu">
+                  <li><a href="login.html">我的信息</a></li>
+                  <li><a href="login.html">修改信息</a></li>
+                  <li><a href="signup.html">退出登录</a></li>
+                </ul>
+              </li>
+              <span style="margin-left: 10px;padding-top: 20px;">{{user.userName}}</span>
+            </template>
+
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <!-- Header strat -->
+
+    <!-- Page feature start -->
+    <section class="page-feature">
+      <div class="container text-center">
+        <h2>课程</h2>
+        <div class="breadcrumb">
+          <a href="home.html">首页</a>
+          <span>/ 课程</span>
+        </div>
+      </div>
+    </section>
+    <!-- Page feature end -->
+
+    <!-- Main form start -->
+    <section class="main-form pb-0">
+      <div class="container">
+        <div class="m-search-form">
+          <form >
+            <input type="text" placeholder="输入主题">
+            <button type="submit">查找</button>
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- Main form end -->
+
+    <!-- Courses section start -->
+    <section class="courses">
+      <div class="container" >
+        <div class="row">
+            <div class="col-lg-4 col-md-6" v-for="i in tableData">
+              <div class="single-course">
+                <figure class="course-thumb">
+                  <img :src="'../static/img/image/' + i.classImg " alt="" >
+                </figure>
+                <div class="course-content">
+                  <h3><a :href="'course-details.html?id='+i.classId">{{i.className}}</a></h3>
+                  <p>{{i.classExplain}}
+                  </p>
+                  <div class="enroll">
+                    <div class="ratings">
+                      <span class="total-students"><i class="ti-user"></i> 220 学生</span>
+                      </a><a href="#"><i class="ti-star"></i>
+                    </a><a href="#"><i class="ti-star"></i>
+                    </a><a href="#"><i class="ti-star"></i>
+                    </a><a href="#"><i class="ti-star"></i>
+                    </a>
+                      <span class="enrolled">(330)</span>
+                    </div>
+                    <div class="course-meta text-right">
+                      <!-- <strong class="course-price">$29.00</strong> -->
+                      <a href="#" class="btn btn-filled">加入课程</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+        </div>
+
+        <div class="pagination">
+          <!-- <a href="$">prev</a> -->
+          <el-pagination
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  background
+                  :page-size="pageSize"
+                  layout="prev, pager, next"
+                  :total="totalCount">
+          </el-pagination>
+        </div>
+      </div>
+    </section>
+    <!-- Courses section end -->
+
+    <!-- Footer strat -->
+    <footer class="footer">
+      <div class="foo-top">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-3 col-sm-6">
+              <div class="widget widget-navigation">
+                <h4 class="widget-title">关于我们</h4>
+                <ul>
+                  <li><a href="#">关于我们</a></li>
+                  <li><a href="#">联系我们</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+              <div class="widget widget-navigation">
+                <h4 class="widget-title">问题反馈</h4>
+                <ul>
+                  <li><a href="#">问题反馈</a></li>
+                  <li><a href="#">提交意见</a></li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+    </footer>
+    <!-- Footer end -->
+  </div>
+    <!-- JS -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/scripts.js"></script>
+    <script src="js/Session.js"></script>
+    <script>
+      var Main = {
+        data() {
+          return {
+            pageSize:6,
+            currentPage:1,
+            totalPage:0,
+            totalCount:0,
+            input:"",
+            tableData: [],
+            user:{}
+          }
+        },
+        methods: {
+          handleEdit(index, row) {
+            console.log(index, row);
+          },
+          handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+            let _this = this;
+            _this.pageSize = val;
+            _this.getList();
+          },
+          handleCurrentChange(val) {
+            let _this = this;
+            console.log(`当前页: ${val}`);
+            _this.currentPage = val;
+            _this.getList();
+          },
+          getList:function () {
+            let _this = this;
+            $.ajax({
+              type : "get",
+              url : "http://localhost:10000/class/list/"+_this.currentPage+"/"+_this.pageSize,
+              dataType : "json",
+              contentType : "application/json",
+              success:function (result) {
+                _this.tableData = result.data.rows;
+                _this.totalPage = result.data.totalPage;
+                _this.totalCount = result.data.totalCount;
+                console.log(result);
+              }
+            })
+          },
+        },
+        mounted() {
+          let _this = this;
+          getSession(_this)
+          _this.getList();
+
+        }
+      };
+      var Ctor = Vue.extend(Main)
+      new Ctor().$mount('#app')
+
+
+    </script>
+  </body>
+</html>

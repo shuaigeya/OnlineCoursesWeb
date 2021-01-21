@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../static/js/jquery-3.5.1.js"></script>
+    <script src="../static/js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../static/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="../static/element-ui/lib/index.js"></script>
+</head>
+<body>
+<div id="app">
+    <el-table-column align="center" label="视频url">
+        <template slot-scope="scope">
+            <el-button type="primary" @click="playVideo(scope.row)" ref="btn" size="mini">
+                播 放
+            </el-button>
+        </template>
+    </el-table-column>
+
+    <el-dialog title :visible.sync="dialogPlay" width="30%" @close="closeDialog">
+        <video src="video/a.mp4" controls autoplay class="video" :ref="dialogVideo"
+               width="100%"></video>
+    </el-dialog>
+
+</div>
+</body>
+<script>
+    $(function () {
+        var Main = {
+            data() {
+                return {
+                    fileList: []
+                };
+            },
+
+            mounted() {
+                this.$refs.btn.onclik(function() {
+                    if (this.$refs.dialogVideo.paused) {
+                        this.$refs.dialogVideo.play();
+                    } else {
+                        this.$refs.dialogVideo.pause();
+                    }
+                });
+            },
+            methods:{
+// 视频播放
+                playVideo(row) {
+                    this.dialogPlay = true;
+                    this.videoUrl = row.videoUrl;
+                },
+            },
+            closeDialog() {
+                this.videoUrl = ""; //清空数据 关闭视频播放
+            },
+
+        }
+        var Ctor = Vue.extend(Main)
+        new Ctor().$mount('#app')
+    });
+</script>
+</html>

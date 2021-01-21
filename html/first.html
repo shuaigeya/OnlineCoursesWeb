@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Hello, Bootstrap Table!</title>
+    <script src="../static/js/jquery-3.5.1.js"></script>
+    <script src="../static/js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../static/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="../static/element-ui/lib/index.js"></script>
+
+    <script src="../static/Bootstrap3.7/js/echarts.min.js"></script>
+
+</head>
+<style>
+    #app{
+        width: 70%;
+        height: 100%;
+        margin: auto;
+        overflow:hidden;
+    }
+    .box-card {
+        width: 49%;
+        display:inline-block;
+    }
+    .el-card__header {
+        padding: 10px 20px;
+        background: #f2f6fc;
+    }
+    .num{
+        color: red;
+    }
+    .card-1{
+        margin-left: 1%;
+    }
+    #box-card-1{
+       margin-top: 2%;
+    }
+</style>
+<body>
+
+</body>
+    <div id="app" >
+        <el-card class="box-card">
+            <div slot="header" class="clearfix" >
+                <span>用户总览</span>
+            </div>
+            <el-row :gutter="20">
+                <el-col :span="6"><div class="grid-content bg-purple">
+                    <p>今日新增</p>
+                    <p class="num">100</p>
+                </div></el-col>
+                <el-col :span="6"><div class="grid-content bg-purple">
+                    <p>本周新增</p>
+                    <p class="num">100</p>
+                </div></el-col>
+                <el-col :span="6"><div class="grid-content bg-purple">
+                    <p>本月新增</p>
+                    <p class="num">100</p>
+                </div></el-col>
+                <el-col :span="6"><div class="grid-content bg-purple">
+                    <p>用户总数</p>
+                    <p class="num">100</p>
+                </div></el-col>
+            </el-row>
+        </el-card>
+        <el-card class="box-card card-1" >
+        <div slot="header" class="clearfix" >
+            <span>用户总览</span>
+        </div>
+        <el-row :gutter="20">
+            <el-col :span="6"><div class="grid-content bg-purple">
+                <p>今日新增</p>
+                <p class="num">100</p>
+            </div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple">
+                <p>本周新增</p>
+                <p class="num">100</p>
+            </div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple">
+                <p>本月新增</p>
+                <p class="num">100</p>
+            </div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple">
+                <p>用户总数</p>
+                <p class="num">100</p>
+            </div></el-col>
+        </el-row>
+    </el-card>
+
+        <el-card id="box-card-1">
+            <div slot="header" class="clearfix" >
+                <span>数据概括</span>
+            </div>
+            <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+            <div id="main" style="width: 100%;height:400px;"></div>
+        </el-card>
+
+    </div>
+
+
+<script>
+    new Vue().$mount('#app');
+</script>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+
+    // 指定图表的配置项和数据
+    option = {
+        title: {
+            text: '增长一览'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['用户', '视频', '班级', '评论']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                name: '用户',
+                type: 'line',
+                stack: '总量',
+                data: [120, 132, 101, 134, 90, 230, 210]
+            },
+            {
+                name: '视频',
+                type: 'line',
+                stack: '总量',
+                data: [220, 182, 191, 234, 290, 330, 310]
+            },
+            {
+                name: '班级',
+                type: 'line',
+                stack: '总量',
+                data: [150, 232, 201, 154, 190, 330, 410]
+            },
+            {
+                name: '评论',
+                type: 'line',
+                stack: '总量',
+                data: [320, 332, 301, 334, 390, 330, 320]
+            },
+        ]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script>
+</html>

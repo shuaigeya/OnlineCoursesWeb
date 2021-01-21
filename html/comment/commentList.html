@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../../static/js/jquery-3.5.1.js"></script>
+    <script src="../../static/js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../../static/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="../../static/element-ui/lib/index.js"></script>
+    <style>
+        .grid-content {
+            border-radius: 4px;
+            min-height: 36px;
+        }
+        #input_test{
+            width: 100%;
+            /*min-height:100px;*/
+            margin-bottom: 2%;
+            border: 1px solid #e6e6e6;
+            padding: 1%;
+            box-sizing:border-box;
+        }
+
+        #button_1{
+            width: 100%;
+            padding: 0.5%;
+            padding-left: 1%;
+            margin-bottom: 3%;
+            border: 1px solid #e6e6e6;
+            box-sizing:border-box;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div id="input_test">
+        <p >条件搜素</p>
+        <el-row :gutter="20">
+            <el-col :span="6"><div class="grid-content bg-purple">
+                <el-input v-model="input" placeholder="请输入用户名"></el-input>
+            </div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple">
+                <el-input v-model="input" placeholder="请输入手机号"></el-input>
+            </div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple">
+                <el-input v-model="input" placeholder="请输入邮箱"></el-input>
+            </div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple">
+                <el-button type="primary"  >搜素</el-button>
+            </div></el-col>
+        </el-row>
+    </div>
+    <div id="button_1" >
+        <span>数据列表</span>
+
+        <div style="display: inline-block;margin-left: 90%">
+            <el-button  @click="dialogVisible = true"
+            >添加</el-button>
+        </div>
+
+        <el-dialog
+                title="添加"
+                :visible.sync="dialogVisible"
+                width="30%"
+                :before-close="handleClose">
+            <el-form :model="form">
+                <el-form-item label="班级名称" :label-width="formLabelWidth">
+                    <el-input v-model="form.className" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="add">确 定</el-button>
+             </span>
+        </el-dialog>
+
+    </div>
+    <div style="border: 1px solid #e6e6e6">
+        <el-table
+
+                :data="tableData"
+                style="width: 100%"
+                :default-sort = "{prop: 'date', order: 'descending'}"
+        >
+            <template  v-for="item in tableColumnList">
+                <template v-if=" item.prop !== 'classExplain' ">
+                    <el-table-column
+                            :prop="item.prop"
+                            :label="item.propName"
+                            sortable>
+                    </el-table-column>
+                </template>
+                <template v-else>
+                    <el-table-column
+                            :prop="item.prop"
+                            :label="item.propName"
+                    >
+                    </el-table-column>
+                </template>
+            </template>
+            <el-table-column
+                    label="操作"
+                    width="180px">
+                <template slot-scope="scope">
+                    <el-button
+                            @click="handleUpdate(scope.$index, scope.row)"
+                            size="small">
+                        编辑
+                    </el-button>
+                    <el-dialog
+                            title="编辑"
+                            :visible.sync="dialogVisible_1"
+                            width="30%"
+                            :before-close="handleClose">
+                        <el-form :model="form">
+                            <el-form-item label="班级名称" :label-width="formLabelWidth">
+                                <el-input v-model="form.className" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="班级简介" :label-width="formLabelWidth">
+                                <el-input v-model="form.classExplain" autocomplete="off"></el-input>
+                            </el-form-item>
+                        </el-form>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="dialogVisible_1 = false">取 消</el-button>
+                            <el-button type="primary" @click="update">确 定</el-button>
+                         </span>
+                    </el-dialog>
+
+                    <el-button
+                            type="danger"
+                            @click="handleDelete(scope.$index, scope.row,tableData)"
+                            size="small">
+                        删除
+                    </el-button>
+                </template>
+            </el-table-column>
+
+
+
+        </el-table>
+        </template>
+        <template>
+            <div class="block" style="float: right;margin-top: 1%">
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="currentPage"
+                        :page-sizes="[5, 10, 15, 20]"
+                        :page-size="pageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="totalCount">
+                </el-pagination>
+            </div>
+        </template>
+    </div>
+</div>
+<script>
+    var Main = {
+        data() {
+            return {
+                pageSize:5,
+                currentPage:1,
+                totalPage:0,
+                totalCount:0,
+                input:"",
+                tableData: [],
+                dialogVisible: false,
+                dialogVisible_1:false,
+                formLabelWidth:'120px',
+                tableColumnList :[
+                    {prop: 'userId', propName: '创始人'},
+                    {prop: 'time', propName: '创建时间'},
+                    {prop: 'commentContent', propName: '评论内容'},
+                    {prop: 'classId', propName: '班级id'},
+                    {prop: 'textPaperId', propName: '试卷id'},
+                ],
+                value:'',
+                form: {
+                    classId:0,
+                    className: '',
+                    classExplain:'',
+                }
+            }
+        },
+        methods: {
+            add:function(){
+                let _this =this;
+                console.log(_this.form.className,_this.form.classExplain)
+                $.ajax({
+                    type : "post",
+                    url : "http://localhost:20000/comment/add",
+                    contentType : "application/json;charset=UTF-8",
+                    data:JSON.stringify({
+                        "className": _this.form.className,
+                        "classExplain":_this.form.classExplain,
+                    }),
+                    success: function (result) {
+                        console.log(result)
+                        if (result.code == 10000) {
+                            _this.$message({
+                                type: 'success',
+                                message: "添加成功",
+                            });
+                            _this.dialogVisible=false;
+                        }else {
+                            _this.$message({
+                                type: 'error',
+                                message: "添加失败",
+                            });
+                        }
+                    }
+                });
+            },
+            update:function () {
+                let _this = this;
+                $.ajax({
+                    type : "post",
+                    url : "http://localhost:20000/comment/update/",
+                    dataType : "json",
+                    data:JSON.stringify({
+                        "classId": _this.form.classId,
+                        "className": _this.form.className,
+                        "classExplain": _this.form.classExplain
+                    }),
+                    contentType : "application/json",
+                    success:function (result) {
+                        if(result.code == 10000){
+                            _this.$message({
+                                type: 'success',
+                                message: '修改'+result.msg
+                            });
+                            window.location.reload();
+                        }else {
+                            _this.$message({
+                                type: 'error',
+                                message: result.msg
+                            });
+                        }
+                    }
+                });
+            },
+            handleEdit(index, row) {
+                console.log(index, row);
+            },
+            handleDelete(index, row, rows) {
+                this.$confirm('是否删除?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+
+                    console.log(index, row);
+                    var id = row.commentId;
+                    let _this = this ;
+                    $.ajax({
+                        type: "post",
+                        url: "http://localhost:20000/comment/del/" + id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function (result) {
+                            if (result.code == 10000) {
+                                _this.$message({
+                                    type: 'success',
+                                    message: "删除成功",
+                                });
+                                rows.splice(index, 1);
+                            }else {
+                                _this.$message({
+                                    type: 'error',
+                                    message: "删除失败",
+                                });
+                            }
+                        }
+                    });
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
+            },
+            handleUpdate(index, row) {
+                let _this = this;
+                console.log(index,row);
+                _this.form.className = row.className;
+                _this.form.classExplain = row.classExplain;
+                _this.dialogVisible_1 = true;
+                _this.form.classId =row.classId;
+
+            },
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+                let _this = this;
+                _this.pageSize = val;
+                _this.getList();
+            },
+            handleCurrentChange(val) {
+                let _this = this;
+                console.log(`当前页: ${val}`);
+                _this.currentPage = val;
+                _this.getList();
+            },
+            handleClose(done) {
+                this.$confirm('确认关闭？')
+                    .then(_ => {
+                        done();
+                    })
+                    .catch(_ => {});
+            },
+            getList:function () {
+                let _this = this;
+                $.ajax({
+                    type : "get",
+                    url : "http://localhost:20000/comment/list/"+_this.currentPage+"/"+_this.pageSize,
+                    dataType : "json",
+                    contentType : "application/json",
+                    success:function (result) {
+                        console.log(result.data);
+                        _this.tableData = result.data.rows;
+                        _this.totalPage = result.data.totalPage;
+                        _this.totalCount = result.data.totalCount;
+
+                    }
+                })
+            },
+        },
+        mounted() {
+            let _this = this;
+            _this.getList();
+        }
+    };
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('#app')
+
+
+</script>
+
+</body>
+
+</html>

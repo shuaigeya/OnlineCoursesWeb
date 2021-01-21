@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <!-- All CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/themify-icons.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="../static/js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../static/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="../static/element-ui/lib/index.js"></script>
+
+    <title></title>
+  </head>
+  <body>
+
+  <div id="app">
+    <!-- Preloader -->
+    <div id="preloader">
+      <div id="status"></div>
+    </div>
+
+    <!-- Header strat -->
+    <header class="header">
+      <div class="container">
+        <nav class="navbar">
+          <!-- Site logo -->
+          <a href="home.html" class="logo">
+            <h4>在线课程前台</h4>
+          </a>
+          <a href="javascript:void(0);" id="mobile-menu-toggler">
+            <i class="ti-align-justify"></i>
+          </a>
+          <ul class="navbar-nav">
+            <li>
+              <a href="home.html">首页</a>
+            </li>
+
+            <li>
+              <a href="courses.html">课程</a>
+            </li>
+
+            <li >
+              <a href="blog.html">博客</a>
+            </li>
+
+            <li >
+              <a href="myCourse.html">我的课程</a>
+            </li>
+
+            <template v-if="user == null">
+              <li class="has-menu-child">
+                <a href="javascript:void(0);">登录</a>
+                <ul class="sub-menu">
+                  <li><a href="login.html">登录</a></li>
+                  <li><a href="signup.html">注册</a></li>
+                </ul>
+              </li>
+            </template>
+
+            <template v-else>
+              <li class="has-menu-child" style="padding-top: 10px; margin-left: 10px">
+                <img :src="'../static/img/image/' + user.userHeadPortrait" style="width: 35px;height: 35px;border-radius: 50%">
+                <!--              <img src="../static/img/image/1.jpg" style="width: 30px;height: 30px">-->
+                <ul class="sub-menu">
+                  <li><a href="login.html">我的信息</a></li>
+                  <li><a href="login.html">修改信息</a></li>
+                  <li><a href="signup.html">退出登录</a></li>
+                </ul>
+              </li>
+              <span style="margin-left: 10px;padding-top: 20px;">{{user.userName}}</span>
+            </template>
+
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <!-- Header strat -->
+    
+    <!-- Page feature start -->
+    <section class="page-feature">
+      <div class="container text-center">
+        <h2>Blog</h2>
+        <div class="breadcrumb">
+          <a href="home.html">主页</a>
+          <span>/ 博客</span>
+        </div>
+      </div>
+    </section>
+    <!-- Page feature end -->
+
+    <!-- Blog Posts section start -->
+    <section class="blog-posts">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="row">
+              <div class="col-md-6" v-for="i in tableData">
+                <div class="post-item">
+                  <img src="images/post/1.jpg" alt="">
+                  <div class="post-content">
+                    <div class="meta-tags">
+                      <a href="#" class="post-meta date">{{i.creationTime}}</a>
+                    </div>
+                    <h3 class="post-title"><a :href="'blog-details.html?id='+i.blogId">{{i.blogTitle}}</a></h3>
+                    <div class="meta-tags">
+                      <a href="#" class="post-meta category" ><i class="ti-user"></i>{{i.userName}}</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        background
+                        :page-size="pageSize"
+                        layout="prev, pager, next"
+                        :total="totalCount">
+                </el-pagination>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <aside class="sidebar">
+              <div class="widget widget_search">
+                <form action="#">
+                  <input type="text" name="s" placeholder="Search ..." required="">
+                  <i class="ti-search"></i>
+                </form>
+              </div>
+              <div class="widget categories">
+                <h3 class="widget-title">类别</h3>
+                <ul>
+                  <li><a href="#">Java<span>(5)</span></a></li>
+                  <li><a href="#">C++ <span>(9)</span></a></li>
+                  <li><a href="#">Python <span>(23)</span></a></li>
+                </ul>
+              </div>
+              <div class="widget recent-courses">
+                <h3 class="widget-title">最新的博客</h3>
+                  <ul>
+                    <li>
+                      <a href="#">
+                        <img src="images/post/3.jpg" alt="">
+                        <h5>最热门的技术.</h5>
+                        <div class="meta-tags">
+                          <span class="post-meta category">shuai
+                          </span> | <span class="post-meta date">2020-10-12</span>
+                        </div>
+                      </a>
+                    </li>
+                  </ul>
+              </div>
+            </aside>
+          </div>
+        </div>        
+      </div>
+    </section>
+    <!-- Blog Posts section end -->
+
+    <!-- Footer strat -->
+    <footer class="footer">
+      <div class="foo-top">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-3 col-sm-6">
+              <div class="widget widget-navigation">
+                <h4 class="widget-title">关于我们</h4>
+                <ul>
+                  <li><a href="#">关于我们</a></li>
+                  <li><a href="#">联系我们</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+              <div class="widget widget-navigation">
+                <h4 class="widget-title">问题反馈</h4>
+                <ul>
+                  <li><a href="#">问题反馈</a></li>
+                  <li><a href="#">提交意见</a></li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+    </footer>
+    <!-- Footer end -->
+  </div>
+    <!-- JS -->
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/jquery-ui.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script src="js/scripts.js"></script>
+  <script src="js/Session.js"></script>
+  <script>
+    var Main = {
+      data() {
+        return {
+          pageSize:10,
+          currentPage:1,
+          totalPage:0,
+          totalCount:0,
+          input:"",
+          tableData: [],
+          user:{}
+        }
+      },
+      methods: {
+        handleEdit(index, row) {
+          console.log(index, row);
+        },
+        handleSizeChange(val) {
+          console.log(`每页 ${val} 条`);
+          let _this = this;
+          _this.pageSize = val;
+          _this.getList();
+        },
+        handleCurrentChange(val) {
+          let _this = this;
+          console.log(`当前页: ${val}`);
+          _this.currentPage = val;
+          _this.getList();
+        },
+        getList:function () {
+          let _this = this;
+          $.ajax({
+            type : "get",
+            url : "http://localhost:10000/blog/list/"+_this.currentPage+"/"+_this.pageSize,
+            dataType : "json",
+            contentType : "application/json",
+            success:function (result) {
+              _this.tableData = result.data.rows;
+              _this.totalPage = result.data.totalPage;
+              _this.totalCount = result.data.totalCount;
+              console.log(result);
+            }
+          })
+        },
+      },
+      mounted() {
+        let _this = this;
+        getSession(_this)
+        _this.getList();
+
+      }
+    };
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('#app')
+
+
+  </script>
+  </body>
+</html>

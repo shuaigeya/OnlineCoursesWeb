@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Favicon icons -->
+    <link href="images/favicon.png" rel="shortcut icon">
+
+    <!-- All CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/themify-icons.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="../static/js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../static/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="../static/element-ui/lib/index.js"></script>
+
+    <title></title>
+  </head>
+  <body>
+
+    <!-- Preloader -->
+    <div id="preloader">
+      <div id="status"></div>
+    </div>
+    
+    <!-- Header strat -->
+    <header class="header">
+      <div class="container">
+        <nav class="navbar">
+          <!-- Site logo -->
+          <a href="home.html" class="logo">
+            <h4>在线课程前台</h4>
+          </a>
+          <a href="javascript:void(0);" id="mobile-menu-toggler">
+            <i class="ti-align-justify"></i>
+          </a>
+          <ul class="navbar-nav">
+            <li>
+              <a href="home.html">首页</a>
+            </li>
+
+            <li>
+              <a href="courses.html">课程</a>
+            </li>
+
+            <li >
+              <a href="blog.html">博客</a>
+            </li>
+
+            <li >
+              <a href="myCourse.html">我的课程</a>
+            </li>
+
+            <template v-if="user == null">
+              <li class="has-menu-child">
+                <a href="javascript:void(0);">登录</a>
+                <ul class="sub-menu">
+                  <li><a href="login.html">登录</a></li>
+                  <li><a href="signup.html">注册</a></li>
+                </ul>
+              </li>
+            </template>
+
+            <template v-else>
+              <li class="has-menu-child" style="padding-top: 10px; margin-left: 10px">
+                <img :src="'../static/img/image/' + user.userHeadPortrait" style="width: 35px;height: 35px;border-radius: 50%">
+                <!--              <img src="../static/img/image/1.jpg" style="width: 30px;height: 30px">-->
+                <ul class="sub-menu">
+                  <li><a href="login.html">我的信息</a></li>
+                  <li><a href="login.html">修改信息</a></li>
+                  <li><a href="signup.html">退出登录</a></li>
+                </ul>
+              </li>
+              <span style="margin-left: 10px;padding-top: 20px;">{{user.userName}}</span>
+            </template>
+
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <!-- Header strat -->
+
+    <!-- Login / Registration start -->
+    <section class="banner login-registration">
+      <div class="vector-img">
+        <img src="images/vector.png" alt="">
+      </div>
+      <div class="container" id="app">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="content-box">
+              <h2>创建账户</h2>
+              <p>精神的浩瀚，想象的活跃，心灵的勤奋，就是天才。</p>
+            </div>
+            <el-form  el-form :model="ruleForm" status-icon  ref="ruleForm" class="sl-form">
+              <div class="form-group">
+                <label>用户名</label>
+                <input type="text" v-model="ruleForm.name" placeholder="张三" required>
+              </div>
+              <div class="form-group">
+                <label>邮箱 或 手机号</label>
+                <input type="text" v-model="ruleForm.email" placeholder="example@gmail.com" required>
+              </div>
+              <div class="form-group">
+                <label>密码</label>
+                <input type="password" v-model="ruleForm.password" placeholder="Password" required>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input">
+                <label class="form-check-label">同意 <a href="#">条款和条件</a></label>
+              </div>
+              <el-button class="btn btn-filled btn-round" type="warning" @click="submitForm">注&#12288;册</el-button>
+              <p class="notice">已 有 账 户 ? &#12288;<a href="login.html">登 录 账 户 </a></p>
+            </el-form>
+          </div>          
+        </div>
+      </div>      
+    </section>
+  <!-- Login / Registration end -->
+
+    <!-- Footer strat -->
+    <footer class="footer">
+      <div class="foo-top">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-3 col-sm-6">
+              <div class="widget widget-navigation">
+                <h4 class="widget-title">关于我们</h4>
+                <ul>
+                  <li><a href="#">关于我们</a></li>
+                  <li><a href="#">联系我们</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+              <div class="widget widget-navigation">
+                <h4 class="widget-title">问题反馈</h4>
+                <ul>
+                  <li><a href="#">问题反馈</a></li>
+                  <li><a href="#">提交意见</a></li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+    </footer>
+
+
+    <!-- JS -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/scripts.js"></script>
+    <script>
+      $(function () {
+        var Main = {
+          data() {
+            return {
+              ruleForm: {
+                name: '',
+                password: '',
+                email:''
+              },
+            };
+          },
+          methods: {
+            submitForm() {
+              let _this =this;
+              console.log(_this.ruleForm);
+              $.ajax({
+                type : "post",
+                url : "http://localhost:10000/register",
+                dataType : "json",
+                contentType : "application/json",
+                data : JSON.stringify({
+                  "userName": _this.ruleForm.name,
+                  "userPassword":_this.ruleForm.password,
+                  "userEmail":_this.ruleForm.email,
+                }),
+                success:function (result) {
+                  console.log(result);
+                  if (result.code == 10000){
+                    $(window).attr('location','./home-01.html');
+                  }else{
+                    _this.$message({
+                      type: 'error',
+                      message: result.msg,
+                    });
+                  }
+                }
+              });
+            }
+          }
+        }
+        var Ctor = Vue.extend(Main)
+        new Ctor().$mount('#app')
+      });
+
+    </script>
+  </body>
+</html>

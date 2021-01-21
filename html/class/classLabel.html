@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../../static/js/jquery-3.5.1.js"></script>
+    <script src="../../static/js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../../static/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="../../static/element-ui/lib/index.js"></script>
+    <style>
+        .grid-content {
+            border-radius: 4px;
+            min-height: 36px;
+        }
+        #input_test{
+            width: 100%;
+            /*min-height:100px;*/
+            margin-bottom: 2%;
+            border: 1px solid #e6e6e6;
+            padding: 1%;
+            box-sizing:border-box;
+        }
+
+        #button_1{
+            width: 100%;
+            padding: 0.5%;
+            padding-left: 1%;
+            margin-bottom: 3%;
+            border: 1px solid #e6e6e6;
+            box-sizing:border-box;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div id="input_test">
+        <p >条件搜素</p>
+        <el-row :gutter="20">
+            <el-col :span="6"><div class="grid-content bg-purple">
+                <el-input v-model="input" placeholder="请输入用户名"></el-input>
+            </div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple">
+                <el-input v-model="input" placeholder="请输入手机号"></el-input>
+            </div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple">
+                <el-input v-model="input" placeholder="请输入邮箱"></el-input>
+            </div></el-col>
+            <el-col :span="6"><div class="grid-content bg-purple">
+                <el-button type="primary"  >搜素</el-button>
+            </div></el-col>
+        </el-row>
+    </div>
+    <div id="button_1" >
+        <span>数据列表</span>
+        <div style="display: inline-block;margin-left: 90%">
+            <el-button  @click="add"
+            >添加</el-button>
+        </div>
+
+    </div>
+    <div style="border: 1px solid #e6e6e6">
+        <el-table
+
+                :data="tableData"
+                style="width: 100%"
+                :default-sort = "{prop: 'date', order: 'descending'}"
+        >
+            <template  v-for="item in tableColumnList">
+                <template v-if=" item.prop == 'userTypeId' ">
+                    <el-table-column
+                            :prop="item.prop"
+                            :label="item.propName"
+                            sortable
+                            width="180">
+                    </el-table-column>
+                </template>
+                <template v-else>
+                    <el-table-column
+                            :prop="item.prop"
+                            :label="item.propName"
+                    >
+                    </el-table-column>
+                </template>
+            </template>
+            <el-table-column
+                    label="操作"
+                    width="180px">
+                <template slot-scope="scope">
+                    <el-button
+                            @click="handleUpdate(scope.$index, scope.row)"
+                            size="small">
+                        编辑
+                    </el-button>
+                    <el-button
+                            type="danger"
+                            @click="handleDelete(scope.$index, scope.row,tableData)"
+                            size="small">
+                        删除
+                    </el-button>
+                </template>
+            </el-table-column>
+
+        </el-table>
+        </template>
+        <template>
+            <div class="block" style="float: right;margin-top: 1%">
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="currentPage"
+                        :page-sizes="[5, 10, 15, 20]"
+                        :page-size="pageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="totalCount">
+                </el-pagination>
+            </div>
+        </template>
+    </div>
+</div>
+<script>
+    var Main = {
+        data() {
+            return {
+                pageSize:5,
+                currentPage:1,
+                totalPage:0,
+                totalCount:0,
+                input:"",
+                tableData: [],
+                tableColumnList :[
+                    {prop: 'classLabelId', propName: '班级标签ID'},
+                    {prop: 'classLabelName', propName: '班级标签名称'},
+                ],
+                options: [{
+                    value: '1',
+                    label: '1月'
+                }, {
+                    value: '4',
+                    label: '1季'
+                }, {
+                    value: '12',
+                    label: '1年'
+                }, {
+                    value: '36',
+                    label: '3年'
+                }, {
+                    value: '60',
+                    label: '5年'
+                }],
+                value:'',
+                dialogVisible: false,
+                dialogVisible2:false,
+                form: {
+                    userId: '',
+                    time:'',
+                }
+            }
+        },
+        methods: {
+            add:function(){
+                this.$prompt('请输入类型名称', '用户类型添加', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    var  _this = this ;
+                    $.ajax({
+                        type : "post",
+                        url : "http://localhost:20000/classLabel/add/"+value,
+                        dataType : "json",
+                        contentType : "application/json",
+                        success:function (result) {
+                            if(result.code == 10000){
+                                _this.$message({
+                                    type: 'success',
+                                    message: '添加'+result.msg
+                                });
+                            }else {
+                                _this.$message({
+                                    type: 'success',
+                                    message: result.msg
+                                });
+                            }
+                        }
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消输入'
+                    });
+                });
+            },
+            handleEdit(index, row) {
+                console.log(index, row);
+            },
+            handleDelete(index, row, rows) {
+                this.$confirm('是否删除?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+
+                    console.log(index, row);
+                    var id = row.classLabelId;
+                    var _this = this ;
+                    $.ajax({
+                        type: "post",
+                        url: "http://localhost:20000/classLabel/del/" + id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function (result) {
+                            if (result.code == 10000) {
+                                _this.$message({
+                                    type: 'success',
+                                    message: "删除成功",
+                                });
+                                rows.splice(index, 1);
+                            }else {
+                                _this.$message({
+                                    type: 'error',
+                                    message: "删除失败",
+                                });
+                            }
+                        }
+                    });
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
+            },
+            handleUpdate(index, row) {
+                console.log(index,row);
+                this.$prompt('请输入类型名称', '用户类型添加', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    var  _this = this ;
+                    $.ajax({
+                        type : "post",
+                        url : "http://localhost:20000/classLabel/update/",
+                        dataType : "json",
+                        data:JSON.stringify({
+                            "classLabelId": row.classLabelId,
+                            "classLabelName":value,
+                        }),
+                        contentType : "application/json",
+                        success:function (result) {
+                            if(result.code == 10000){
+                                _this.$message({
+                                    type: 'success',
+                                    message: '添加'+result.msg
+                                });
+                            }else {
+                                _this.$message({
+                                    type: 'success',
+                                    message: result.msg
+                                });
+                            }
+                        }
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消输入'
+                    });
+                });
+
+            },
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+                let _this = this;
+                _this.pageSize = val;
+                _this.getList();
+            },
+            handleCurrentChange(val) {
+                let _this = this;
+                console.log(`当前页: ${val}`);
+                _this.currentPage = val;
+                _this.getList();
+            },
+            getList:function () {
+                let _this = this;
+                $.ajax({
+                    type : "get",
+                    url : "http://localhost:20000/classLabel/list/"+_this.currentPage+"/"+_this.pageSize,
+                    dataType : "json",
+                    contentType : "application/json",
+                    success:function (result) {
+                        console.log(result.data);
+                        _this.tableData = result.data.rows;
+                        _this.totalPage = result.data.totalPage;
+                        _this.totalCount = result.data.totalCount;
+
+                    }
+                })
+            }
+        },
+        mounted() {
+            let _this = this;
+            _this.getList();
+
+        }
+    };
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('#app')
+
+
+</script>
+
+</body>
+
+</html>

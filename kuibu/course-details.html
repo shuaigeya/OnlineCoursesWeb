@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Favicon icons -->
+    <link href="images/favicon.png" rel="shortcut icon">
+
+    <!-- All CSS -->
+    <!-- All CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/themify-icons.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="../static/js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../static/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="../static/element-ui/lib/index.js"></script>
+    <title></title>
+  </head>
+  <body>
+
+  <div id="app">
+    <!-- Preloader -->
+    <div id="preloader">
+      <div id="status"></div>
+    </div>
+    
+    <!-- Header strat -->
+    <header class="header">
+      <div class="container">
+        <nav class="navbar">
+          <!-- Site logo -->
+          <a href="home.html" class="logo">
+            <h4>在线课程前台</h4>
+          </a>
+          <a href="javascript:void(0);" id="mobile-menu-toggler">
+            <i class="ti-align-justify"></i>
+          </a>
+          <ul class="navbar-nav">
+            <li>
+              <a href="home.html">首页</a>
+            </li>
+
+            <li>
+              <a href="courses.html">课程</a>
+            </li>
+
+            <li >
+              <a href="blog.html">博客</a>
+            </li>
+
+            <li >
+              <a href="myCourse.html">我的课程</a>
+            </li>
+
+            <template v-if="user == null">
+              <li class="has-menu-child">
+                <a href="javascript:void(0);">登录</a>
+                <ul class="sub-menu">
+                  <li><a href="login.html">登录</a></li>
+                  <li><a href="signup.html">注册</a></li>
+                </ul>
+              </li>
+            </template>
+
+            <template v-else>
+              <li class="has-menu-child" style="padding-top: 10px; margin-left: 10px">
+                <img :src="'../static/img/image/' + user.userHeadPortrait" style="width: 35px;height: 35px;border-radius: 50%">
+                <!--              <img src="../static/img/image/1.jpg" style="width: 30px;height: 30px">-->
+                <ul class="sub-menu">
+                  <li><a href="login.html">我的信息</a></li>
+                  <li><a href="login.html">修改信息</a></li>
+                  <li><a href="signup.html">退出登录</a></li>
+                </ul>
+              </li>
+              <span style="margin-left: 10px;padding-top: 20px;">{{user.userName}}</span>
+            </template>
+
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <!-- Header strat -->
+
+    <!-- Page feature start -->
+    <section class="page-feature">
+      <div class="container text-center">
+        <h2>课程详情</h2>
+        <div class="breadcrumb">
+          <a href="home.html">主页</a>
+          <span>/ 课程详情</span>
+        </div>
+      </div>
+    </section>
+    <!-- Page feature end -->
+
+    <!-- 课程 -->
+    <section class="course-details" >
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="course-preview">
+              <img :src="'../static/img/image/' + classImg " alt="" >
+              <a href="#" class="preview-btn"><i class="ti-control-play"></i></a>
+            </div>
+            <div class="course-content">
+              <h3>{{className}} <span class="badge"><i class="ti-tag"></i>精品课</span></h3>
+              <p>{{classExplain}}</p>
+              <div class="details">
+                <span>由 <a href="#">{{userName}}</a></span>
+                <span>{{creationTime}}</span>
+                <div class="ratings">
+                  <span>39 评论</span>
+                  <a href="#"><i class="ti-star"></i>
+                  </a><a href="#"><i class="ti-star"></i>
+                  </a><a href="#"><i class="ti-star"></i>
+                  </a><a href="#"><i class="ti-star"></i>
+                  </a><a href="#"><i class="ti-star"></i>
+                  </a>
+                </div>                
+              </div>
+            </div>
+
+            <div class="course-content">
+              <h5>操作</h5>
+              <div>
+                <el-button type="primary" plain @click="dialogVisible_1=true">视频添加</el-button>
+                <el-button type="primary" plain>作业添加</el-button>
+                <el-button type="primary" plain>课件上传</el-button>
+                <el-button type="primary" plain>成员邀请</el-button>
+              </div>
+            </div>
+
+            <div class="course-curriculum">
+              <ul class="nav nav-tabs">
+                <li><a class="active" data-toggle="tab" href="#overview">概述</a></li>
+                <li><a data-toggle="tab" href="#curriculum">章节</a></li>
+                <li><a data-toggle="tab" href="#curriculum">作业</a></li>
+              </ul>
+              <div class="tab-content">
+                <div id="overview" class="tab-pane fade in show active">
+                  <h4 class="tab-title">本课程包括</h4>
+                  <ul class="tab-list-2col mb-4">
+                    <li><i class="ti-video-camera"></i>48.5 小时点播视频</li>
+                    <li><i class="ti-pencil"></i>57 文章</li>
+                    <li><i class="ti-download"></i>12 可下载资源</li>
+                    <li><i class="ti-tablet"></i>可在移动端播放</li>
+                    <li><i class="ti-medall"></i>结业证书</li>
+                  </ul>
+
+                  <h4 class="tab-title">描述</h4>
+                  <p>学Java</p>
+                  <h4 class="tab-title">课程要求</h4>
+                  <ul>
+                    <li><i class="ti-hand-point-right"></i>完整的视频学习时间</li>
+                    <li><i class="ti-hand-point-right"></i>全部的课程作业</li>
+                    <li><i class="ti-hand-point-right"></i>按时的课业目标</li>
+                    <li><i class="ti-hand-point-right"></i>良好的交流氛围</li>
+                  </ul>
+                </div>
+                <div id="curriculum" class="tab-pane fade">
+                  <div class="accordion" id="accordion">
+                    <div class="accordion-item active">
+
+                      <div id="acpan1" class="collapse show" data-parent="#accordion">
+                        <div class="acr-body">
+                          <ul v-for="data in videoList">
+                            <li @click="broadcast(data.videoSrc)"><a ><i class="ti-control-play"></i>{{data.videoName}}</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div id="test" class="tab-pane fade">
+                  <div class="accordion" id="accordion1">
+                    <div class="accordion-item active">
+
+                      <div id="acpan2" class="collapse show" data-parent="#accordion">
+                        <div class="acr-body">
+                          <ul v-for="data in videoList">
+                            <li @click="broadcast(data.videoSrc)"><a ><i class="ti-control-play"></i>{{data.videoName}}</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <el-dialog
+                      title="视频播放"
+                      :visible.sync="dialogVisible"
+                      width="550px"
+                      :before-close="handleClose">
+                      <div class="whole">
+                        <video :src="'../static/video/1/'+videoSrc" controls="controls" style="width: 500px;height: 300px"></video>
+                      </div>
+              </el-dialog>
+
+
+              <el-dialog
+                      title="视频上传"
+                      :visible.sync="dialogVisible_1"
+                      width="40%"
+                      :limit="1"
+                      :before-close="handleClose">
+
+                      <el-form ref="form" label-width="80px" >
+                        <el-form-item label="视频名称">
+                          <el-input v-model="videoName"></el-input>
+                        </el-form-item>
+                        <el-form-item label="视频上传">
+                          <el-upload
+                                  class="upload-demo"
+                                  :action='"http://localhost:10000/util/videoUpload/" + classId'
+                                  :on-preview="handlePictureCardPreview"
+                                  :on-remove="handleRemove"
+                                  :limit="1"
+                                  :on-success="success"
+                                  list-type="text"
+                                  accept=".mp4">
+                            <el-button size="small" type="primary">点击上传</el-button>
+                          </el-upload>
+                        </el-form-item>
+                        <el-form-item>
+                          <el-button type="primary" @click="videoUpload">立即上传</el-button>
+                          <el-button>取消</el-button>
+                        </el-form-item>
+                      </el-form>
+              </el-dialog>
+
+            </div>
+
+
+
+            <div class="comments">
+              <h4 class="comment-title">评论</h4>
+              <ul>
+                <li v-for="c in comment">
+                  <div class="single-comment">
+                    <div class="user-thumb">
+                      <img class="avatar-small circle" src="images/avatar-small.png" alt="">
+                    </div>
+                    <div class="comments-body">
+                        <h4>{{c.user.userName}}</h4>
+                        <p>{{c.commentContent}}</p>
+                          <a href="#"><i class="ti-back-right"></i>回复</a>
+                    </div>                    
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="comment-form">
+              <h4 class="comment-title">发布评论</h4>
+              <form action="#">
+                <textarea placeholder="写评论"></textarea>
+                <button class="btn btn-filled btn-round ml-auto"><span class="bh"></span> <span>提交</span></button>
+              </form>
+            </div>
+            
+          </div>
+          <div class="col-lg-4">
+            <aside class="sidebar">
+              <div class="widget instractors">
+                  <figure>
+                    <img src="images/avatar-small.png" alt="" class="avatar-md circle">
+                  </figure>
+                  <h4>{{userName}}</h4>
+                  <span>java 开发</span>
+                  <!-- <span class="total-courses"><i class="ti-user"></i> 09 Courses</span> -->
+              </div>
+              <div class="widget categories">
+                <h3 class="widget-title">课程标签</h3>
+                <ul>
+                  <li v-for="i in classLabel"><a href="#">{{i.classLabelName}} <span>(5)</span></a></li>
+                </ul>
+              </div>
+              <div class="widget recent-courses">
+                <h3 class="widget-title">最近课程</h3>
+                  <ul>
+                    <li>
+                      <a href="#">
+                        <img src="images/lectures/3.jpg" alt="">
+                        <h5>疯狂c++</h5>
+                        <span class="skills">English, Communication, Social</span>
+                        <span class="lectures">5 lectures</span>
+                      </a>
+                    </li>
+                  </ul>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Courses Details section end -->
+
+    <!-- Footer strat -->
+    <footer class="footer">
+      <div class="foo-top">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-3 col-sm-6">
+              <div class="widget widget-navigation">
+                <h4 class="widget-title">关于我们</h4>
+                <ul>
+                  <li><a href="#">关于我们</a></li>
+                  <li><a href="#">联系我们</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+              <div class="widget widget-navigation">
+                <h4 class="widget-title">问题反馈</h4>
+                <ul>
+                  <li><a href="#">问题反馈</a></li>
+                  <li><a href="#">提交意见</a></li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+    </footer>
+    <!-- Footer end -->
+  </div>
+    <!-- JS -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/scripts.js"></script>
+    <script src="js/Session.js"></script>
+    <script>
+      var Main = {
+        data() {
+          return {
+              classImg:'',
+              classId: 0,
+              className: "",
+              classExplain: "",
+              creationTime: "",
+              userName:"",
+              classLabel:[],
+              videoList:[],
+              comment:[],
+              dialogVisible: false,
+              dialogVisible_1:false,
+              user:{},
+              videoName:'',
+              videoSrc:''
+          }
+        },
+        methods: {
+          success(response, file, fileList) {
+            console.log(file);
+            this.videoSrc = file.name;
+          },
+          handlePictureCardPreview(file) {
+            this.videoSrc = file.url;
+          },
+          handleRemove(file, fileList) {
+            console.log(file, fileList);
+          },
+          videoUpload:function(){
+            let _this =this;
+            $.ajax({
+                      type : "post",
+                      url : "http://localhost:10000/video/",
+                      contentType : "application/json;charset=UTF-8",
+                      data:JSON.stringify({
+                        "classId": this.classId,
+                        "videoName":this.videoName,
+                        "videoSrc":this.videoSrc,
+                      }),
+                      success: function (result) {
+                        console.log(result);
+                        _this.dialogVisible_1=false
+                      }
+            });
+          },
+          broadcast:function(src){
+            // alert(src);
+            this.videoSrc = src;
+            this.dialogVisible=true;
+          },
+          handleEdit(index, row) {
+            console.log(index, row);
+          },
+
+          getData:function (id) {
+            let _this = this;
+            $.ajax({
+              type : "get",
+              url : "http://localhost:10000/getProject/"+id,
+              dataType : "json",
+              contentType : "application/json",
+              success:function (result) {
+                _this.classLabel = result.data.classLabel;
+                _this.classImg = result.data.classImg;
+                _this.classId = result.data.classId;
+                _this.className = result.data.className;
+                _this.classExplain = result.data.classExplain;
+                _this.creationTime = result.data.creationTime;
+                _this.userName = result.data.teacher.userName;
+                console.log(result);
+              }
+            })
+          },
+          getComment:function (id) {
+            let _this = this;
+            $.ajax({
+              type : "get",
+              url : "http://localhost:10000/comment/"+id,
+              dataType : "json",
+              contentType : "application/json",
+              success:function (result) {
+                _this.comment = result.data;
+                console.log(result);
+              }
+            })
+          },
+          getVideo:function (id) {
+            let _this = this;
+            $.ajax({
+              type : "get",
+              url : "http://localhost:10000/video/"+id,
+              dataType : "json",
+              contentType : "application/json",
+              success:function (result) {
+                _this.videoList = result.data;
+                console.log(result);
+              }
+            })
+          },
+          handleClose(done) {
+            done();
+          },
+        },
+        mounted() {
+          let _this = this;
+          getSession(_this);
+          let arr = location.search.substring(1).split('=');
+          _this.getData(arr[1]);
+          _this.getComment(arr[1]);
+          _this.getVideo(arr[1]);
+        }
+      };
+      var Ctor = Vue.extend(Main)
+      new Ctor().$mount('#app')
+    </script>
+  </body>
+</html>

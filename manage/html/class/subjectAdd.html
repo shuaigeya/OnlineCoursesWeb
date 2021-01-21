@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../../../static/js/jquery-3.5.1.js"></script>
+    <script src="../../../static/js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../../../static/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="../../../static/element-ui/lib/index.js"></script>
+
+</head>
+<style>
+    #app{
+        width: 60%;
+        margin: auto;
+    }
+    .el-form-item__label{
+        width: 15%;
+    }
+    .el-textarea__inner {
+        margin-bottom: 3%;
+    }
+</style>
+<body>
+<div id="app">
+    <el-form ref="form" :model="form" label-width="80px" >
+        <el-form-item label="题目内容" placeholder="请输入密码">
+            <el-input v-model="form.subjectTopic"></el-input>
+        </el-form-item>
+        <el-form-item label="题目类型">
+            <el-radio-group v-model="form.subjectType">
+                <el-radio label="单选"></el-radio>
+                <el-radio label="多选"></el-radio>
+                <el-radio label="判断"></el-radio>
+                <el-radio label="问答"></el-radio>
+            </el-radio-group>
+        </el-form-item>
+        <template v-if="form.subjectType ==='单选'||form.subjectType==='多选' ">
+            <el-input
+                    type="textarea"
+                    autosize
+                    placeholder="请输入选项A"
+                    v-model="form.option.option1">
+            </el-input>
+            <el-input
+                    type="textarea"
+                    autosize
+                    placeholder="请输入选项B"
+                    v-model="form.option.option2">
+            </el-input>
+            <el-input
+                    type="textarea"
+                    autosize
+                    placeholder="请输入选项C"
+                    v-model="form.option.option3">
+            </el-input>
+            <el-input
+                    type="textarea"
+                    autosize
+                    placeholder="请输入选项D"
+                    v-model="form.option.option4">
+            </el-input>
+        </template>
+
+        <template v-if="form.subjectType ==='' ">
+
+    </template>
+
+
+
+    </el-form>
+</div>
+</body>
+<script>
+    $(function () {
+        var Main = {
+            data() {
+                return {
+                    textarea1: '',
+                    textarea2: '',
+                    form: {
+                        subjectTopic: '',
+                        subjectType:'单选',
+                        option: {
+                            option1:0,
+                            option2:0,
+                            option3:0,
+                            option4:0
+                        },
+
+                    }
+                }
+            },
+            methods: {
+                onSubmit() {
+                    this.$confirm('确认创建?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        let _this =this;
+                        $.ajax({
+                            type : "post",
+                            url : "http://localhost:20000/user/add",
+                            contentType : "application/json;charset=UTF-8",
+                            data:JSON.stringify({
+                                "userTypeId": this.form.userType,
+                                "userName":this.form.userName,
+                                "userPassword":this.form.userPassword,
+                                "userSex":this.form.sex,
+                                "userAge":this.form.age,
+                                "userPhone":this.form.userPhone,
+                                "userEmail":this.form.userEmail,
+                                "userAutograph":this.form.userAutograph
+                            }),
+                            success: function (result) {
+                                console.log(result)
+                                if (result.code == 10000) {
+                                    _this.$message({
+                                        type: 'success',
+                                        message: "添加成功",
+                                    });
+                                    $(window).attr('location','./userList.html');
+                                }else {
+                                    _this.$message({
+                                        type: 'error',
+                                        message: "添加失败",
+                                    });
+                                }
+                            }
+                        });
+
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+
+                    console.log(this.form);
+
+                }
+            }
+        }
+        var Ctor = Vue.extend(Main)
+        new Ctor().$mount('#app')
+    });
+</script>
+</html>
